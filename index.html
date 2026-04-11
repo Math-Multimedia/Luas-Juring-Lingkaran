@@ -1,0 +1,782 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif}
+:root{--blue:#1a6fc4;--blue-light:#e8f4fd;--blue-mid:#5ba3e0;--blue-dark:#0d4a8a;--white:#fff;--gray:#f7fbff;--text:#1a2a3a;--text-m:#4a6080}
+#app{min-height:600px;background:linear-gradient(135deg,#e8f4fd 0%,#fff 60%,#dbeeff 100%)}
+.screen{display:none;flex-direction:column;min-height:600px}
+.screen.active{display:flex}
+
+/* HEADER */
+.hdr{background:linear-gradient(90deg,var(--blue-dark),var(--blue));color:#fff;padding:16px 24px;display:flex;align-items:center;gap:12px;border-radius:0 0 18px 18px;box-shadow:0 4px 16px #1a6fc433}
+.hdr-icon{width:40px;height:40px;background:#fff2;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px}
+.hdr-title{font-size:17px;font-weight:700;letter-spacing:.3px}
+.hdr-sub{font-size:12px;opacity:.85}
+.progress-bar{height:5px;background:#fff3;border-radius:3px;margin-top:8px}
+.progress-fill{height:100%;background:#7dd3fc;border-radius:3px;transition:width .5s}
+
+/* NAV PILLS */
+.nav-pills{display:flex;gap:6px;padding:14px 18px;overflow-x:auto;scrollbar-width:none;background:#fff;border-bottom:1.5px solid #dbeeff}
+.nav-pill{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid #b3d8f7;background:#f0f8ff;color:var(--blue);cursor:pointer;white-space:nowrap;transition:all .2s}
+.nav-pill.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.nav-pill.done{background:#dcfce7;color:#16a34a;border-color:#86efac}
+
+/* CONTENT */
+.content{flex:1;padding:20px 18px;overflow-y:auto}
+
+/* CARDS */
+.card{background:#fff;border-radius:16px;border:1.5px solid #dbeeff;padding:18px;margin-bottom:14px;box-shadow:0 2px 10px #1a6fc411}
+.card-blue{background:linear-gradient(135deg,#e8f4fd,#f0f9ff);border-color:#93c5fd}
+.section-title{font-size:15px;font-weight:700;color:var(--blue-dark);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;background:var(--blue);color:#fff;margin-bottom:10px}
+.badge-green{background:#16a34a}
+.badge-orange{background:#ea580c}
+
+/* PIZZA SVG */
+.pizza-wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin:12px 0}
+.pizza-item{text-align:center;cursor:pointer}
+.pizza-label{font-size:12px;color:var(--text-m);margin-top:6px;font-weight:600}
+.pizza-item svg{transition:transform .2s}
+.pizza-item:hover svg{transform:scale(1.08)}
+
+/* FORMULA BOX */
+.formula{background:linear-gradient(135deg,#dbeeff,#e0f2fe);border:2px solid var(--blue-mid);border-radius:14px;padding:14px;text-align:center;margin:12px 0}
+.formula-main{font-size:22px;font-weight:800;color:var(--blue-dark)}
+.formula-sub{font-size:13px;color:var(--text-m);margin-top:4px}
+
+/* BUTTON */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 24px;border-radius:12px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.2px}
+.btn-primary{background:linear-gradient(90deg,var(--blue),var(--blue-mid));color:#fff;box-shadow:0 3px 12px #1a6fc433}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 5px 18px #1a6fc455}
+.btn-secondary{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+.btn-wrap{display:flex;justify-content:center;gap:10px;margin-top:16px;flex-wrap:wrap}
+
+/* INPUT */
+.input-group{margin:10px 0}
+.input-group label{font-size:13px;color:var(--text-m);font-weight:600;display:block;margin-bottom:5px}
+.input-field{width:100%;padding:10px 14px;border:1.5px solid #93c5fd;border-radius:10px;font-size:14px;outline:none;transition:border .2s;background:#f8fbff}
+.input-field:focus{border-color:var(--blue);box-shadow:0 0 0 3px #1a6fc422}
+
+/* FEEDBACK */
+.feedback{padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;margin:10px 0;display:none;animation:fadeIn .3s}
+.feedback.show{display:block}
+.fb-correct{background:#dcfce7;color:#15803d;border:1.5px solid #86efac}
+.fb-wrong{background:#fee2e2;color:#dc2626;border:1.5px solid #fca5a5}
+.fb-info{background:#e0f2fe;color:#0369a1;border:1.5px solid #7dd3fc}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--blue);color:#fff;padding:8px;text-align:center}
+td{padding:8px;text-align:center;border:1px solid #dbeeff}
+tr:nth-child(even) td{background:#f0f9ff}
+
+/* QUIZ */
+.quiz-opt{display:block;width:100%;padding:12px 16px;margin:7px 0;background:#f0f8ff;border:2px solid #dbeeff;border-radius:12px;font-size:14px;cursor:pointer;text-align:left;transition:all .2s;font-weight:600;color:var(--text)}
+.quiz-opt:hover{border-color:var(--blue);background:#e8f4fd}
+.quiz-opt.correct{background:#dcfce7;border-color:#16a34a;color:#15803d}
+.quiz-opt.wrong{background:#fee2e2;border-color:#dc2626;color:#dc2626}
+.quiz-opt:disabled{cursor:default}
+.quiz-num{font-size:13px;color:var(--blue);font-weight:700;margin-bottom:6px}
+.quiz-q{font-size:15px;font-weight:700;color:var(--text);margin-bottom:12px;line-height:1.5}
+
+/* CELEBRATION */
+.celebrate{display:none;text-align:center;padding:18px;animation:fadeIn .4s}
+.celebrate.show{display:block}
+.flowers{font-size:28px;animation:bounce .5s infinite alternate;display:block;margin:6px 0;letter-spacing:4px}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+.reward-text{font-size:18px;font-weight:800;color:var(--blue-dark);margin:8px 0}
+.score-big{font-size:40px;font-weight:900;color:var(--blue);margin:8px 0}
+
+/* IDENTITAS */
+.id-card{background:linear-gradient(135deg,var(--blue-dark),var(--blue));color:#fff;border-radius:16px;padding:18px;margin-bottom:12px}
+.id-person{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #ffffff33}
+.id-person:last-child{border-bottom:none}
+.id-avatar{width:36px;height:36px;background:#ffffff33;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.id-name{font-size:13px;font-weight:700}
+.id-nim{font-size:11px;opacity:.8}
+
+/* CONCLUSION */
+.conclusion-area{width:100%;min-height:90px;padding:12px;border:2px dashed #93c5fd;border-radius:12px;font-size:14px;background:#f8fbff;resize:vertical;font-family:inherit;color:var(--text)}
+.star-rating{display:flex;gap:8px;margin:10px 0}
+.star{font-size:22px;cursor:pointer;color:#d1d5db;transition:color .2s}
+.star.lit{color:#f59e0b}
+
+/* STEP indicator */
+.step-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#dbeeff;margin:0 2px}
+.step-dot.active{background:var(--blue);width:20px;border-radius:5px}
+.step-dot.done{background:#86efac}
+
+/* Scrollable content fit */
+.phase-content{max-height:480px;overflow-y:auto;padding-right:4px}
+
+/* Highlight box */
+.highlight{background:#fffbeb;border-left:4px solid #f59e0b;border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0;font-size:13px;color:#78350f}
+
+/* circle visual */
+.circle-visual{display:flex;justify-content:center;margin:14px 0}
+</style>
+
+<div id="app">
+<!-- COVER SCREEN -->
+<div id="screen-cover" class="screen active">
+  <div class="hdr">
+    <div class="hdr-icon">&#8982;</div>
+    <div><div class="hdr-title">Multimedia Matematika</div><div class="hdr-sub">Luas Juring Lingkaran</div></div>
+  </div>
+  <div class="content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding-top:30px">
+    <div style="font-size:13px;color:var(--blue);font-weight:700;letter-spacing:1px;text-transform:uppercase">Guided Discovery Learning</div>
+    <div style="font-size:26px;font-weight:900;color:var(--blue-dark);line-height:1.2">Menemukan Rumus<br>Luas Juring Lingkaran</div>
+    <div style="font-size:13px;color:var(--text-m);max-width:320px;line-height:1.6">Belajar matematika dengan cara menyenangkan melalui eksplorasi dan penemuan mandiri!</div>
+    
+    <div class="circle-visual">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="62" fill="#e8f4fd" stroke="#93c5fd" stroke-width="2"/>
+        <path d="M70,70 L132,70 A62,62 0 0,1 101,123.8 Z" fill="#1a6fc4" opacity=".85"/>
+        <path d="M70,70 L132,70 A62,62 0 0,0 101,16.2 Z" fill="#5ba3e0" opacity=".7"/>
+        <line x1="70" y1="70" x2="132" y2="70" stroke="#0d4a8a" stroke-width="2"/>
+        <line x1="70" y1="70" x2="101" y2="123.8" stroke="#0d4a8a" stroke-width="2"/>
+        <text x="70" y="73" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">&#945;</text>
+        <circle cx="70" cy="70" r="3" fill="#0d4a8a"/>
+        <text x="70" y="138" text-anchor="middle" font-size="10" fill="#4a6080">Juring Lingkaran</text>
+      </svg>
+    </div>
+
+    <div class="id-card" style="width:100%;max-width:360px;text-align:left">
+      <div style="font-size:11px;opacity:.7;margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px">Penyusun Multimedia</div>
+      <div style="font-size:10px;opacity:.6;margin-bottom:10px">Program Studi Tadris Matematika — UIN Walisongo Semarang</div>
+      <div class="id-person"><div class="id-avatar">ZN</div><div><div class="id-name">Zahrotun Nafi'ah</div><div class="id-nim">24080560031</div></div></div>
+      <div class="id-person"><div class="id-avatar">SA</div><div><div class="id-name">Shinta Alifiana Dewi</div><div class="id-nim">24080560041</div></div></div>
+      <div class="id-person"><div class="id-avatar">SR</div><div><div class="id-name">Shella Ramadhani</div><div class="id-nim">24080560046</div></div></div>
+      <div class="id-person"><div class="id-avatar">MD</div><div><div class="id-name">Muhammad Danda Kholilurrohman</div><div class="id-nim">24080560047</div></div></div>
+    </div>
+    <div class="btn-wrap"><button class="btn btn-primary" onclick="startLearning()">Mulai Belajar &#8594;</button></div>
+  </div>
+</div>
+
+<!-- MAIN LEARNING SCREEN -->
+<div id="screen-main" class="screen">
+  <div class="hdr">
+    <div class="hdr-icon">&#8982;</div>
+    <div style="flex:1">
+      <div class="hdr-title" id="phase-title">Fase 1</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:16%"></div></div>
+    </div>
+    <div style="font-size:12px;opacity:.8" id="phase-counter">1/6</div>
+  </div>
+  <div class="nav-pills" id="nav-pills">
+    <div class="nav-pill active" onclick="gotoPhase(0)" id="pill-0">&#127758; Stimulus</div>
+    <div class="nav-pill" onclick="gotoPhase(1)" id="pill-1">&#10067; Masalah</div>
+    <div class="nav-pill" onclick="gotoPhase(2)" id="pill-2">&#128196; Data</div>
+    <div class="nav-pill" onclick="gotoPhase(3)" id="pill-3">&#9881; Olah Data</div>
+    <div class="nav-pill" onclick="gotoPhase(4)" id="pill-4">&#10003; Verifikasi</div>
+    <div class="nav-pill" onclick="gotoPhase(5)" id="pill-5">&#128161; Simpulan</div>
+  </div>
+  <div class="content phase-content" id="phase-body"></div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="screen-quiz" class="screen">
+  <div class="hdr">
+    <div class="hdr-icon">&#10003;</div>
+    <div style="flex:1">
+      <div class="hdr-title">Kuis — Luas Juring Lingkaran</div>
+      <div class="progress-bar"><div class="progress-fill" id="quiz-progress" style="width:10%"></div></div>
+    </div>
+    <div style="font-size:12px;opacity:.8" id="quiz-counter">1/5</div>
+  </div>
+  <div class="content" id="quiz-body" style="max-height:520px;overflow-y:auto"></div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="screen-result" class="screen">
+  <div class="hdr"><div class="hdr-icon">&#127942;</div><div><div class="hdr-title">Hasil Kuis</div><div class="hdr-sub">Luas Juring Lingkaran</div></div></div>
+  <div class="content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding-top:20px" id="result-body"></div>
+</div>
+</div>
+
+<script>
+var currentPhase=0;
+var quizIdx=0;
+var quizScore=0;
+var phaseDone=[false,false,false,false,false,false];
+
+var phases=[
+  {title:"Simulasi — Pemberian Rangsang",counter:"1/6",progress:"16%",
+   render:function(){
+    return `<div class="badge">Fase 1 — Simulation</div>
+    <div class="card card-blue">
+      <div class="section-title">&#127829; Masalah Nyata: Potongan Pizza</div>
+      <p style="font-size:13px;color:var(--text-m);line-height:1.7;margin-bottom:10px">
+        Kamu dan teman-temanmu memesan sebuah pizza bundar. Pizza tersebut dipotong menjadi beberapa bagian dengan <b>sudut berbeda-beda</b>. Perhatikan gambar potongan pizza berikut!
+      </p>
+      <div class="pizza-wrap" id="pizza-wrap">
+        <div class="pizza-item" onclick="clickPizza(this,'90°')">
+          <svg width="90" height="90" viewBox="0 0 90 90">
+            <circle cx="45" cy="45" r="40" fill="#fef9c3" stroke="#d97706" stroke-width="2"/>
+            <path d="M45,45 L85,45 A40,40 0 0,1 45,85 Z" fill="#f59e0b" opacity=".85"/>
+            <line x1="45" y1="45" x2="85" y2="45" stroke="#92400e" stroke-width="1.5"/>
+            <line x1="45" y1="45" x2="45" y2="85" stroke="#92400e" stroke-width="1.5"/>
+            <text x="68" y="75" font-size="10" fill="#92400e" font-weight="700">90°</text>
+            <circle cx="45" cy="45" r="3" fill="#92400e"/>
+          </svg>
+          <div class="pizza-label">Potongan A<br>Sudut 90°</div>
+        </div>
+        <div class="pizza-item" onclick="clickPizza(this,'60°')">
+          <svg width="90" height="90" viewBox="0 0 90 90">
+            <circle cx="45" cy="45" r="40" fill="#fef9c3" stroke="#d97706" stroke-width="2"/>
+            <path d="M45,45 L85,45 A40,40 0 0,1 65,79.6 Z" fill="#fb923c" opacity=".9"/>
+            <line x1="45" y1="45" x2="85" y2="45" stroke="#92400e" stroke-width="1.5"/>
+            <line x1="45" y1="45" x2="65" y2="79.6" stroke="#92400e" stroke-width="1.5"/>
+            <text x="68" y="68" font-size="10" fill="#92400e" font-weight="700">60°</text>
+            <circle cx="45" cy="45" r="3" fill="#92400e"/>
+          </svg>
+          <div class="pizza-label">Potongan B<br>Sudut 60°</div>
+        </div>
+        <div class="pizza-item" onclick="clickPizza(this,'120°')">
+          <svg width="90" height="90" viewBox="0 0 90 90">
+            <circle cx="45" cy="45" r="40" fill="#fef9c3" stroke="#d97706" stroke-width="2"/>
+            <path d="M45,45 L85,45 A40,40 0 0,1 25,79.6 Z" fill="#ef4444" opacity=".8"/>
+            <line x1="45" y1="45" x2="85" y2="45" stroke="#92400e" stroke-width="1.5"/>
+            <line x1="45" y1="45" x2="25" y2="79.6" stroke="#92400e" stroke-width="1.5"/>
+            <text x="52" y="78" font-size="10" fill="#92400e" font-weight="700">120°</text>
+            <circle cx="45" cy="45" r="3" fill="#92400e"/>
+          </svg>
+          <div class="pizza-label">Potongan C<br>Sudut 120°</div>
+        </div>
+        <div class="pizza-item" onclick="clickPizza(this,'45°')">
+          <svg width="90" height="90" viewBox="0 0 90 90">
+            <circle cx="45" cy="45" r="40" fill="#fef9c3" stroke="#d97706" stroke-width="2"/>
+            <path d="M45,45 L85,45 A40,40 0 0,1 73.3,17.3 Z" fill="#22c55e" opacity=".85"/>
+            <line x1="45" y1="45" x2="85" y2="45" stroke="#92400e" stroke-width="1.5"/>
+            <line x1="45" y1="45" x2="73.3" y2="17.3" stroke="#92400e" stroke-width="1.5"/>
+            <text x="68" y="38" font-size="10" fill="#92400e" font-weight="700">45°</text>
+            <circle cx="45" cy="45" r="3" fill="#92400e"/>
+          </svg>
+          <div class="pizza-label">Potongan D<br>Sudut 45°</div>
+        </div>
+      </div>
+      <div class="feedback fb-info" id="fb-pizza">Klik potongan pizza untuk melihat keterangannya!</div>
+      <div id="pizza-info" style="display:none" class="card" style="margin-top:8px">
+        <div id="pizza-info-text" style="font-size:13px;line-height:1.6"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">&#128161; Apa itu Juring?</div>
+      <p style="font-size:13px;color:var(--text-m);line-height:1.7">
+        <b>Juring lingkaran</b> adalah daerah yang dibatasi oleh <b>dua jari-jari</b> dan sebuah <b>busur lingkaran</b>. Seperti potongan pizza di atas — setiap potongan adalah juring!
+      </p>
+      <div class="highlight">
+        &#10067; <b>Pertanyaan awal:</b> Menurutmu, apakah pizza dengan sudut 90° memiliki luas yang sama dengan pizza sudut 60°? Mengapa?
+      </div>
+      <div class="input-group">
+        <label>Tuliskan jawabanmu:</label>
+        <textarea class="conclusion-area" id="input-stim" placeholder="Tulis pendapatmu di sini..." rows="3"></textarea>
+      </div>
+      <div class="feedback fb-info" id="fb-stim" style="display:none"></div>
+      <div class="btn-wrap">
+        <button class="btn btn-primary" onclick="submitStimulus()">Lanjut ke Fase Berikutnya &#8594;</button>
+      </div>
+    </div>`;
+   }
+  },
+  {title:"Problem Statement — Identifikasi Masalah",counter:"2/6",progress:"33%",
+   render:function(){
+    return `<div class="badge">Fase 2 — Problem Statement</div>
+    <div class="card card-blue">
+      <div class="section-title">&#10067; Rumusan Masalah</div>
+      <p style="font-size:13px;color:var(--text-m);line-height:1.7">
+        Dari situasi pizza tadi, kita dapat merumuskan masalah berikut:
+      </p>
+      <div style="background:#fff;border:2px solid #93c5fd;border-radius:12px;padding:14px;margin:10px 0">
+        <p style="font-size:14px;font-weight:700;color:var(--blue-dark);line-height:1.7">
+          "Bagaimana cara menghitung luas juring lingkaran jika diketahui jari-jari dan besar sudut pusatnya?"
+        </p>
+      </div>
+      <div class="highlight">
+        &#128270; <b>Hipotesis awal:</b> Apakah menurutmu luas juring bergantung pada sudut? Atau pada jari-jari? Atau keduanya?
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">&#128203; Identifikasi Variabel</div>
+      <p style="font-size:13px;color:var(--text-m);margin-bottom:10px">Tandai mana yang menurutmu mempengaruhi luas juring:</p>
+      <div id="var-checks">
+        <label style="display:flex;align-items:center;gap:8px;padding:9px;border-radius:10px;border:1.5px solid #dbeeff;margin:6px 0;cursor:pointer;font-size:13px;font-weight:600">
+          <input type="checkbox" id="chk-r" style="width:16px;height:16px;accent-color:var(--blue)"> Jari-jari lingkaran (r)
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;padding:9px;border-radius:10px;border:1.5px solid #dbeeff;margin:6px 0;cursor:pointer;font-size:13px;font-weight:600">
+          <input type="checkbox" id="chk-a" style="width:16px;height:16px;accent-color:var(--blue)"> Besar sudut pusat (&#945;)
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;padding:9px;border-radius:10px;border:1.5px solid #dbeeff;margin:6px 0;cursor:pointer;font-size:13px;font-weight:600">
+          <input type="checkbox" id="chk-d" style="width:16px;height:16px;accent-color:var(--blue)"> Diameter (d = 2r)
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;padding:9px;border-radius:10px;border:1.5px solid #dbeeff;margin:6px 0;cursor:pointer;font-size:13px;font-weight:600">
+          <input type="checkbox" id="chk-p" style="width:16px;height:16px;accent-color:var(--blue)"> Panjang busur
+        </label>
+      </div>
+      <div class="feedback fb-info" id="fb-var" style="display:none"></div>
+      <div class="btn-wrap">
+        <button class="btn btn-secondary" onclick="checkVar()">Cek Pilihanku</button>
+        <button class="btn btn-primary" id="btn-var-next" style="display:none" onclick="nextPhase()">Lanjut &#8594;</button>
+      </div>
+    </div>`;
+   }
+  },
+  {title:"Data Collection — Pengumpulan Data",counter:"3/6",progress:"50%",
+   render:function(){
+    return `<div class="badge">Fase 3 — Data Collection</div>
+    <div class="card card-blue">
+      <div class="section-title">&#128196; Mengumpulkan Data</div>
+      <p style="font-size:13px;color:var(--text-m);line-height:1.7;margin-bottom:10px">
+        Kita tahu bahwa luas <b>lingkaran penuh</b> (sudut 360°) adalah <b>&#960;r²</b>.<br>
+        Juring adalah <b>bagian</b> dari lingkaran. Berapa bagian? Tergantung pada sudutnya!
+      </p>
+      <div style="display:flex;justify-content:center;margin:10px 0">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <circle cx="80" cy="80" r="70" fill="#e8f4fd" stroke="#93c5fd" stroke-width="2"/>
+          <path d="M80,80 L150,80 A70,70 0 0,1 80,150 Z" fill="#1a6fc4" opacity=".8"/>
+          <path d="M80,80 L150,80 A70,70 0 0,0 80,10 Z" fill="#5ba3e0" opacity=".6"/>
+          <path d="M80,80 L80,10 A70,70 0 0,0 10,80 Z" fill="#93c5fd" opacity=".5"/>
+          <line x1="80" y1="80" x2="150" y2="80" stroke="#0d4a8a" stroke-width="2"/>
+          <line x1="80" y1="80" x2="80" y2="150" stroke="#0d4a8a" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="80" y1="80" x2="80" y2="10" stroke="#0d4a8a" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <line x1="80" y1="80" x2="10" y2="80" stroke="#0d4a8a" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="110" y="125" font-size="11" fill="#fff" font-weight="700">90°</text>
+          <text x="105" y="45" font-size="11" fill="#0d4a8a" font-weight="700">90°</text>
+          <text x="28" y="52" font-size="11" fill="#0d4a8a" font-weight="700">90°</text>
+          <text x="75" y="95" font-size="10" fill="#fff" font-weight="700">r</text>
+          <circle cx="80" cy="80" r="4" fill="#0d4a8a"/>
+          <text x="80" y="158" text-anchor="middle" font-size="10" fill="#4a6080">Lingkaran dibagi 4 juring sama besar</text>
+        </svg>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">&#128202; Tabel Perbandingan</div>
+      <p style="font-size:12px;color:var(--text-m);margin-bottom:8px">Lengkapi tabel berikut! Masukkan nilai luas juring untuk lingkaran dengan r = 7 cm:</p>
+      <table>
+        <tr><th>Sudut (&#945;)</th><th>Bagian dari 360°</th><th>Luas Juring</th></tr>
+        <tr><td>360°</td><td>360/360 = 1</td><td>&#960;r² = 154 cm²</td></tr>
+        <tr><td>180°</td><td>180/360 = 1/2</td><td><input type="text" id="tbl1" placeholder="..." style="width:80px;padding:4px;border:1px solid #93c5fd;border-radius:6px;text-align:center;font-size:12px"/></td></tr>
+        <tr><td>90°</td><td>90/360 = 1/4</td><td><input type="text" id="tbl2" placeholder="..." style="width:80px;padding:4px;border:1px solid #93c5fd;border-radius:6px;text-align:center;font-size:12px"/></td></tr>
+        <tr><td>60°</td><td>60/360 = 1/6</td><td><input type="text" id="tbl3" placeholder="..." style="width:80px;padding:4px;border:1px solid #93c5fd;border-radius:6px;text-align:center;font-size:12px"/></td></tr>
+        <tr><td>&alpha;°</td><td>&alpha;/360</td><td>?</td></tr>
+      </table>
+      <div class="highlight" style="margin-top:10px">&#128218; Ingat: Luas lingkaran penuh = &#960;r² = 3,14 × 7² = 153,86 &#8776; 154 cm²</div>
+      <div class="feedback" id="fb-tbl" style="display:none"></div>
+      <div class="btn-wrap">
+        <button class="btn btn-secondary" onclick="checkTable()">Periksa Jawabanku</button>
+        <button class="btn btn-primary" id="btn-tbl-next" style="display:none" onclick="nextPhase()">Lanjut &#8594;</button>
+      </div>
+    </div>`;
+   }
+  },
+  {title:"Data Processing — Pengolahan Data",counter:"4/6",progress:"67%",
+   render:function(){
+    return `<div class="badge">Fase 4 — Data Processing</div>
+    <div class="card card-blue">
+      <div class="section-title">&#9881; Menemukan Pola</div>
+      <p style="font-size:13px;color:var(--text-m);line-height:1.7;margin-bottom:10px">
+        Dari tabel data tadi, kita lihat polanya:<br>
+        Luas juring = <b>bagian dari lingkaran</b> × Luas lingkaran penuh
+      </p>
+      <div style="background:#fff;border-radius:12px;padding:14px;border:1.5px solid #dbeeff">
+        <div style="font-size:13px;color:var(--text-m);margin-bottom:6px">Langkah derivasi:</div>
+        <div style="font-size:14px;color:var(--blue-dark);line-height:2;font-family:monospace">
+          Luas Juring = (&#945;/360°) × Luas Lingkaran<br>
+          Luas Juring = (&#945;/360°) × &#960;r²
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">&#128269; Latihan Pengolahan</div>
+      <p style="font-size:13px;color:var(--text-m);margin-bottom:8px">Sebuah juring dengan jari-jari <b>10 cm</b> dan sudut pusat <b>72°</b>. Hitung luasnya langkah demi langkah!</p>
+      <div class="input-group">
+        <label>Langkah 1: Berapa nilai &#945;/360°?</label>
+        <input type="text" class="input-field" id="step1" placeholder="Tulis pecahan/desimal..."/>
+        <div class="feedback fb-info" id="fb-s1" style="display:none"></div>
+      </div>
+      <div class="input-group">
+        <label>Langkah 2: Berapa &#960;r² jika r = 10 cm? (gunakan &#960; = 3,14)</label>
+        <input type="text" class="input-field" id="step2" placeholder="Tulis hasilnya..."/>
+        <div class="feedback fb-info" id="fb-s2" style="display:none"></div>
+      </div>
+      <div class="input-group">
+        <label>Langkah 3: Berapa luas juringnya? (Langkah 1 × Langkah 2)</label>
+        <input type="text" class="input-field" id="step3" placeholder="Tulis hasilnya dalam cm²..."/>
+        <div class="feedback fb-info" id="fb-s3" style="display:none"></div>
+      </div>
+      <div class="btn-wrap">
+        <button class="btn btn-secondary" onclick="checkProcess()">Periksa Jawabanku</button>
+        <button class="btn btn-primary" id="btn-proc-next" style="display:none" onclick="nextPhase()">Lanjut &#8594;</button>
+      </div>
+    </div>`;
+   }
+  },
+  {title:"Verification — Pembuktian",counter:"5/6",progress:"83%",
+   render:function(){
+    return `<div class="badge">Fase 5 — Verification</div>
+    <div class="card card-blue">
+      <div class="section-title">&#10003; Membuktikan Rumus</div>
+      <p style="font-size:13px;color:var(--text-m);line-height:1.7">
+        Kita telah menemukan bahwa:<br>
+        <b>Luas Juring = (&#945;/360°) × &#960;r²</b><br><br>
+        Sekarang, mari <b>verifikasi</b> dengan contoh nyata dan konsep yang sudah kita kenal!
+      </p>
+    </div>
+    <div class="card">
+      <div class="section-title">&#127759; Verifikasi dengan Pizza</div>
+      <p style="font-size:13px;color:var(--text-m);margin-bottom:10px">
+        Pizza dengan diameter 28 cm (r = 14 cm) dipotong menjadi 6 bagian sama besar. Berapa luas tiap potongan?
+      </p>
+      <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:12px;margin:8px 0;font-size:13px;line-height:1.9;color:#166534">
+        <b>Solusi:</b><br>
+        Sudut tiap potongan = 360° ÷ 6 = <b>60°</b><br>
+        Luas Juring = (60/360) × &#960; × 14²<br>
+        = (1/6) × 3,14 × 196<br>
+        = (1/6) × 615,44<br>
+        = <b>102,57 cm²</b>
+      </div>
+      <div class="highlight">
+        &#10003; Verifikasi: 6 × 102,57 = 615,42 &#8776; &#960;r² = 615,44 &#10003; (Terbukti benar!)
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">&#128270; Verifikasi Kasus Khusus</div>
+      <p style="font-size:13px;color:var(--text-m);margin-bottom:8px">Klik tombol untuk memverifikasi kasus khusus:</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+        <button class="btn btn-secondary" style="font-size:12px;padding:8px 12px" onclick="verify360()">&#945; = 360°</button>
+        <button class="btn btn-secondary" style="font-size:12px;padding:8px 12px" onclick="verify180()">&#945; = 180°</button>
+        <button class="btn btn-secondary" style="font-size:12px;padding:8px 12px" onclick="verify90()">&#945; = 90°</button>
+      </div>
+      <div class="feedback fb-info show" id="fb-verify" style="display:block">Pilih kasus untuk diverifikasi!</div>
+      <div class="btn-wrap" style="margin-top:14px">
+        <button class="btn btn-primary" onclick="nextPhase()">Lanjut ke Kesimpulan &#8594;</button>
+      </div>
+    </div>`;
+   }
+  },
+  {title:"Generalization — Menarik Kesimpulan",counter:"6/6",progress:"100%",
+   render:function(){
+    return `<div class="badge badge-green">Fase 6 — Generalization</div>
+    <div class="card card-blue">
+      <div class="section-title">&#128161; Saatnya Menyimpulkan!</div>
+      <p style="font-size:13px;color:var(--text-m);line-height:1.7">
+        Hebat! Kamu sudah melalui semua tahap eksplorasi. Sekarang, <b>tuliskan kesimpulanmu sendiri</b> tentang rumus luas juring lingkaran!
+      </p>
+    </div>
+    <div class="card">
+      <div class="section-title">&#9997; Kesimpulanku</div>
+      <p style="font-size:13px;color:var(--text-m);margin-bottom:8px">
+        Berdasarkan kegiatan yang telah kamu lakukan, buatlah kesimpulan dengan kata-katamu sendiri:
+      </p>
+      <div class="input-group">
+        <label>1. Apa yang dimaksud dengan juring lingkaran?</label>
+        <textarea class="conclusion-area" id="c1" rows="2" placeholder="Menurut saya, juring lingkaran adalah..."></textarea>
+      </div>
+      <div class="input-group">
+        <label>2. Faktor apa saja yang mempengaruhi luas juring?</label>
+        <textarea class="conclusion-area" id="c2" rows="2" placeholder="Luas juring dipengaruhi oleh..."></textarea>
+      </div>
+      <div class="input-group">
+        <label>3. Tuliskan rumus luas juring lingkaran!</label>
+        <textarea class="conclusion-area" id="c3" rows="2" placeholder="Rumus luas juring lingkaran adalah..."></textarea>
+      </div>
+      <div class="input-group">
+        <label>4. Bagaimana hubungan antara sudut dan luas juring?</label>
+        <textarea class="conclusion-area" id="c4" rows="2" placeholder="Semakin besar sudut, maka..."></textarea>
+      </div>
+      <p style="font-size:12px;color:var(--text-m);margin:8px 0">Seberapa yakin kamu dengan kesimpulanmu?</p>
+      <div class="star-rating" id="stars">
+        <span class="star" onclick="rateStar(1)">&#9733;</span>
+        <span class="star" onclick="rateStar(2)">&#9733;</span>
+        <span class="star" onclick="rateStar(3)">&#9733;</span>
+        <span class="star" onclick="rateStar(4)">&#9733;</span>
+        <span class="star" onclick="rateStar(5)">&#9733;</span>
+      </div>
+      <div class="feedback fb-info" id="fb-conc" style="display:none"></div>
+      <div class="btn-wrap">
+        <button class="btn btn-secondary" onclick="saveConclude()">Simpan Kesimpulan</button>
+        <button class="btn btn-primary" id="btn-quiz" style="display:none" onclick="startQuiz()">Mulai Kuis &#127942;</button>
+      </div>
+    </div>`;
+   }
+  }
+];
+
+// Quiz data (answers not all A)
+var quizData=[
+  {q:"Sebuah juring memiliki jari-jari 7 cm dan sudut pusat 90°. Berapa luas juringnya? (&#960; = 22/7)",
+   opts:["38,5 cm²","44 cm²","28 cm²","77 cm²"],ans:0,
+   explain:"Luas = (90/360) × (22/7) × 7² = (1/4) × 154 = 38,5 cm²"},
+  {q:"Lingkaran dengan jari-jari 14 cm dibagi menjadi 6 juring sama besar. Besar sudut tiap juring adalah...",
+   opts:["45°","72°","60°","90°"],ans:2,
+   explain:"360° ÷ 6 = 60° per juring"},
+  {q:"Rumus luas juring lingkaran dengan sudut pusat &#945; dan jari-jari r adalah...",
+   opts:["(&#945;/180°) × &#960;r²","(&#945;/360°) × &#960;r","&#945; × r²","(&#945;/360°) × &#960;r²"],ans:3,
+   explain:"Rumus benar: Luas Juring = (&#945;/360°) × &#960;r²"},
+  {q:"Juring dengan jari-jari 10 cm dan sudut 72° memiliki luas... (&#960; = 3,14)",
+   opts:["62,8 cm²","31,4 cm²","125,6 cm²","78,5 cm²"],ans:0,
+   explain:"Luas = (72/360) × 3,14 × 100 = 0,2 × 314 = 62,8 cm²"},
+  {q:"Jika luas juring adalah 77 cm² dan jari-jarinya 14 cm, maka besar sudut pusatnya adalah... (&#960; = 22/7)",
+   opts:["45°","60°","30°","90°"],ans:0,
+   explain:"77 = (&#945;/360) × (22/7) × 196 → 77 = (&#945;/360) × 616 → &#945;/360 = 77/616 = 1/8 → &#945; = 45°"}
+];
+
+var quizAnswered=[];
+var wrongCounts=[];
+
+function startLearning(){showScreen('screen-main');renderPhase(0)}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+  document.getElementById(id).classList.add('active');
+}
+function renderPhase(i){
+  currentPhase=i;
+  var p=phases[i];
+  document.getElementById('phase-title').textContent=p.title;
+  document.getElementById('phase-counter').textContent=p.counter;
+  document.getElementById('progress-fill').style.width=p.progress;
+  document.getElementById('phase-body').innerHTML=p.render();
+  document.querySelectorAll('.nav-pill').forEach(function(el,idx){
+    el.classList.remove('active','done');
+    if(idx===i) el.classList.add('active');
+    else if(phaseDone[idx]) el.classList.add('done');
+  });
+}
+function gotoPhase(i){if(i<=currentPhase||phaseDone[i-1]||i===0)renderPhase(i)}
+function nextPhase(){
+  phaseDone[currentPhase]=true;
+  if(currentPhase<5) renderPhase(currentPhase+1);
+}
+
+// Phase 1 - pizza click
+function clickPizza(el,deg){
+  var info={
+    '90°':'Potongan 90° adalah 1/4 dari pizza. Luasnya = 1/4 × luas seluruh pizza!',
+    '60°':'Potongan 60° adalah 1/6 dari pizza. Semakin kecil sudut = semakin kecil potongan!',
+    '120°':'Potongan 120° adalah 1/3 dari pizza. Sudut lebih besar = potongan lebih besar!',
+    '45°':'Potongan 45° adalah 1/8 dari pizza. Potongan terkecil dari yang lain!'
+  };
+  var fb=document.getElementById('fb-pizza');
+  fb.textContent='Kamu memilih potongan '+deg+' — '+info[deg];
+  fb.classList.add('show','fb-correct');
+  fb.classList.remove('fb-info');
+}
+function submitStimulus(){
+  var v=document.getElementById('input-stim').value.trim();
+  var fb=document.getElementById('fb-stim');
+  fb.style.display='block';
+  if(v.length<10){
+    fb.textContent='Tuliskan pendapatmu lebih lengkap ya! Minimal 1-2 kalimat.';
+    fb.className='feedback fb-wrong show';
+  } else {
+    fb.textContent='Bagus sekali! Pendapatmu sudah ditulis. Mari kita buktikan bersama di fase berikutnya!';
+    fb.className='feedback fb-correct show';
+    phaseDone[0]=true;
+    setTimeout(nextPhase,1200);
+  }
+}
+
+// Phase 2 - variable check
+function checkVar(){
+  var r=document.getElementById('chk-r').checked;
+  var a=document.getElementById('chk-a').checked;
+  var fb=document.getElementById('fb-var');
+  fb.style.display='block';
+  if(r&&a){
+    fb.textContent='Benar! Luas juring dipengaruhi oleh jari-jari (r) dan sudut pusat (α). Keduanya penting!';
+    fb.className='feedback fb-correct show';
+    document.getElementById('btn-var-next').style.display='inline-flex';
+    phaseDone[1]=true;
+  } else if(r&&!a){
+    fb.textContent='Jari-jari berpengaruh, tapi sudut pusat juga menentukan seberapa besar bagian lingkaran!';
+    fb.className='feedback fb-wrong show';
+  } else if(!r&&a){
+    fb.textContent='Sudut berpengaruh, tapi jari-jari juga menentukan ukuran lingkarannya!';
+    fb.className='feedback fb-wrong show';
+  } else {
+    fb.textContent='Coba pilih faktor yang mempengaruhi luas juring!';
+    fb.className='feedback fb-info show';
+  }
+}
+
+// Phase 3 - table
+function checkTable(){
+  var t1=document.getElementById('tbl1').value.replace(',','.').trim();
+  var t2=document.getElementById('tbl2').value.replace(',','.').trim();
+  var t3=document.getElementById('tbl3').value.replace(',','.').trim();
+  var fb=document.getElementById('fb-tbl');
+  fb.style.display='block';
+  // 154/2=77, 154/4=38.5, 154/6≈25.67
+  var ok1=(parseFloat(t1)>=76&&parseFloat(t1)<=78);
+  var ok2=(parseFloat(t2)>=38&&parseFloat(t2)<=39);
+  var ok3=(parseFloat(t3)>=25&&parseFloat(t3)<=26.5);
+  if(ok1&&ok2&&ok3){
+    fb.textContent='Semua jawaban benar! Kamu berhasil menemukan polanya: semakin kecil sudut, semakin kecil luas juringnya!';
+    fb.className='feedback fb-correct show';
+    document.getElementById('btn-tbl-next').style.display='inline-flex';
+    phaseDone[2]=true;
+  } else {
+    var msg='';
+    if(!ok1) msg+=' Sudut 180°: harusnya 77 cm² (154/2).';
+    if(!ok2) msg+=' Sudut 90°: harusnya 38,5 cm² (154/4).';
+    if(!ok3) msg+=' Sudut 60°: harusnya sekitar 25,67 cm² (154/6).';
+    fb.textContent='Ada yang kurang tepat.' + msg + ' Coba hitung lagi ya!';
+    fb.className='feedback fb-wrong show';
+  }
+}
+
+// Phase 4 - processing
+function checkProcess(){
+  var s1=document.getElementById('step1').value.replace(',','.').trim();
+  var s2=document.getElementById('step2').value.replace(',','.').trim();
+  var s3=document.getElementById('step3').value.replace(',','.').trim();
+  var fb1=document.getElementById('fb-s1');
+  var fb2=document.getElementById('fb-s2');
+  var fb3=document.getElementById('fb-s3');
+  var ok1=false,ok2=false,ok3=false;
+  // 72/360 = 0.2 or 1/5
+  if(s1==='0.2'||s1==='1/5'||s1==='0,2'){ok1=true;showFB(fb1,'Tepat! 72/360 = 0,2 atau 1/5','fb-correct')}
+  else showFB(fb1,'Kurang tepat. 72 ÷ 360 = 0,2 (atau 1/5). Coba hitung lagi!','fb-wrong');
+  // pi*r^2 = 3.14*100 = 314
+  if(parseFloat(s2)>=313&&parseFloat(s2)<=315){ok2=true;showFB(fb2,'Benar! πr² = 3,14 × 100 = 314 cm²','fb-correct')}
+  else showFB(fb2,'Belum tepat. π × r² = 3,14 × 10² = 3,14 × 100 = 314 cm²','fb-wrong');
+  // 0.2*314=62.8
+  if(parseFloat(s3)>=62&&parseFloat(s3)<=63.5){ok3=true;showFB(fb3,'Luar biasa! Luas juring = 0,2 × 314 = 62,8 cm²','fb-correct')}
+  else showFB(fb3,'Belum tepat. Luas = 0,2 × 314 = 62,8 cm²','fb-wrong');
+  if(ok1&&ok2&&ok3){
+    phaseDone[3]=true;
+    document.getElementById('btn-proc-next').style.display='inline-flex';
+  }
+}
+function showFB(el,msg,cls){
+  el.style.display='block';
+  el.textContent=msg;
+  el.className='feedback '+cls+' show';
+}
+
+// Phase 5 - verification
+function verify360(){
+  var fb=document.getElementById('fb-verify');
+  fb.textContent='α = 360°: Luas = (360/360) × πr² = 1 × πr² = πr² ✓ Seluruh lingkaran! Terbukti!';
+  fb.className='feedback fb-correct show';fb.style.display='block';
+}
+function verify180(){
+  var fb=document.getElementById('fb-verify');
+  fb.textContent='α = 180°: Luas = (180/360) × πr² = (1/2) × πr² ✓ Setengah lingkaran (setengah lingkaran)! Terbukti!';
+  fb.className='feedback fb-correct show';fb.style.display='block';
+}
+function verify90(){
+  var fb=document.getElementById('fb-verify');
+  fb.textContent='α = 90°: Luas = (90/360) × πr² = (1/4) × πr² ✓ Seperempat lingkaran! Terbukti!';
+  fb.className='feedback fb-correct show';fb.style.display='block';
+}
+
+// Phase 6 - conclusion
+var starVal=0;
+function rateStar(n){
+  starVal=n;
+  document.querySelectorAll('.star').forEach(function(s,i){
+    s.classList.toggle('lit',i<n);
+  });
+  var msgs=['Coba pelajari lagi ya!','Sedikit lagi paham!','Cukup paham!','Sudah paham!','Sangat yakin! Keren!'];
+  var fb=document.getElementById('fb-conc');
+  fb.textContent='Keyakinanmu: '+msgs[n-1];
+  fb.className='feedback fb-info show';fb.style.display='block';
+}
+function saveConclude(){
+  var c1=document.getElementById('c1').value.trim();
+  var c2=document.getElementById('c2').value.trim();
+  var c3=document.getElementById('c3').value.trim();
+  var c4=document.getElementById('c4').value.trim();
+  var fb=document.getElementById('fb-conc');
+  if(c1.length<5||c2.length<5||c3.length<5||c4.length<5){
+    fb.textContent='Lengkapi semua kesimpulan terlebih dahulu ya!';
+    fb.className='feedback fb-wrong show';fb.style.display='block';
+    return;
+  }
+  fb.textContent='Kesimpulanmu tersimpan! Luar biasa, kamu berhasil menemukan sendiri rumus luas juring lingkaran! Siap untuk kuis?';
+  fb.className='feedback fb-correct show';fb.style.display='block';
+  phaseDone[5]=true;
+  document.getElementById('btn-quiz').style.display='inline-flex';
+}
+
+// QUIZ
+function startQuiz(){
+  quizIdx=0;quizScore=0;quizAnswered=[];wrongCounts=[];
+  for(var i=0;i<quizData.length;i++){quizAnswered.push(false);wrongCounts.push(0);}
+  showScreen('screen-quiz');
+  renderQuiz();
+}
+function renderQuiz(){
+  var q=quizData[quizIdx];
+  document.getElementById('quiz-counter').textContent=(quizIdx+1)+'/'+quizData.length;
+  document.getElementById('quiz-progress').style.width=(((quizIdx+1)/quizData.length)*100)+'%';
+  var html='<div class="card"><div class="quiz-num">Soal '+(quizIdx+1)+' dari '+quizData.length+'</div>';
+  html+='<div class="quiz-q">'+q.q+'</div>';
+  for(var i=0;i<q.opts.length;i++){
+    var letter=['A','B','C','D'][i];
+    html+='<button class="quiz-opt" id="opt-'+i+'" onclick="selectOpt('+i+')">'+letter+'. '+q.opts[i]+'</button>';
+  }
+  html+='<div class="feedback" id="fb-quiz" style="display:none"></div>';
+  if(wrongCounts[quizIdx]>0){
+    html+='<div style="font-size:12px;color:#ea580c;margin-top:6px">Sudah '+wrongCounts[quizIdx]+' kali salah — hitung kembali ya! '+q.explain+'</div>';
+  }
+  html+='</div>';
+  document.getElementById('quiz-body').innerHTML=html;
+}
+function selectOpt(i){
+  var q=quizData[quizIdx];
+  var fb=document.getElementById('fb-quiz');
+  fb.style.display='block';
+  if(i===q.ans){
+    // correct
+    document.getElementById('opt-'+i).classList.add('correct');
+    document.querySelectorAll('.quiz-opt').forEach(function(b){b.disabled=true});
+    if(!quizAnswered[quizIdx]){quizScore++;quizAnswered[quizIdx]=true;}
+    fb.textContent='Jawaban benar! '+q.explain;
+    fb.className='feedback fb-correct show';
+    setTimeout(function(){
+      if(quizIdx<quizData.length-1){quizIdx++;renderQuiz();}
+      else showResult();
+    },1600);
+  } else {
+    // wrong
+    wrongCounts[quizIdx]++;
+    document.getElementById('opt-'+i).classList.add('wrong');
+    fb.textContent='Jawabanmu belum tepat! Coba hitung kembali dengan teliti. '+q.explain;
+    fb.className='feedback fb-wrong show';
+    // re-enable after brief delay for retry
+    setTimeout(function(){
+      document.getElementById('opt-'+i).classList.remove('wrong');
+      document.getElementById('opt-'+i).disabled=false;
+      var fb2=document.getElementById('fb-quiz');
+      if(fb2) fb2.style.display='none';
+    },2000);
+  }
+}
+
+var rewards=[
+  {txt:"Sempurna! Luar Biasa Sekali!",flowers:"&#127800;&#127801;&#127802;&#127803;&#127804;&#127801;&#127800;"},
+  {txt:"Hebat! Kamu Hampir Sempurna!",flowers:"&#127804;&#127801;&#127800;&#127803;&#127804;"},
+  {txt:"Bagus! Terus Semangat Belajar!",flowers:"&#127800;&#127803;&#127801;&#127804;"},
+  {txt:"Cukup Baik! Pelajari Lagi ya!",flowers:"&#127800;&#127801;&#127803;"},
+  {txt:"Jangan Menyerah! Coba Lagi!",flowers:"&#127800;&#127801;"}
+];
+function showResult(){
+  showScreen('screen-result');
+  var pct=Math.round((quizScore/quizData.length)*100);
+  var ri=quizScore===5?0:quizScore===4?1:quizScore===3?2:quizScore===2?3:4;
+  var r=rewards[ri];
+  var html='<span class="flowers">'+r.flowers+'</span>';
+  html+='<div class="reward-text">'+r.txt+'</div>';
+  html+='<div class="score-big">'+quizScore+'/'+quizData.length+'</div>';
+  html+='<div style="font-size:14px;color:var(--text-m)">Nilai: '+pct+'</div>';
+  html+='<span class="flowers">'+r.flowers+'</span>';
+  html+='<div class="formula" style="width:100%;max-width:320px"><div class="formula-main">L = (&#945;/360°) × &#960;r²</div><div class="formula-sub">Rumus Luas Juring Lingkaran</div></div>';
+  html+='<div style="font-size:13px;color:var(--text-m);margin:8px 0">Terima kasih telah belajar bersama kami!<br>UIN Walisongo Semarang</div>';
+  html+='<div class="btn-wrap"><button class="btn btn-secondary" onclick="restartQuiz()">Ulangi Kuis</button><button class="btn btn-primary" onclick="showScreen(\'screen-main\')">Kembali ke Materi</button></div>';
+  document.getElementById('result-body').innerHTML=html;
+}
+function restartQuiz(){startQuiz();}
+</script>
