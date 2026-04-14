@@ -447,6 +447,16 @@ var phases=[
         <button class="btn btn-secondary" style="font-size:12px;padding:8px 12px" onclick="verify360()">&#945; = 360°</button>
         <button class="btn btn-secondary" style="font-size:12px;padding:8px 12px" onclick="verify180()">&#945; = 180°</button>
         <button class="btn btn-secondary" style="font-size:12px;padding:8px 12px" onclick="verify90()">&#945; = 90°</button>
+          <div class="card">
+    <div class="card-title">🖊️ Papan Kerja (Whiteboard)</div>
+    <canvas id="whiteCanvas" width="550" height="250" style="background:#f0f9ff;border-radius:9px;border:1px solid var(--border);cursor:crosshair;touch-action:none;display:block;max-width:100%;"></canvas>
+    <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+      <input type="color" id="penColor" value="#1e40af" style="width:27px;height:27px;border:none;cursor:pointer;border-radius:4px;">
+      <div class="cg"><label>Ukuran</label><input type="range" min="1" max="14" value="3" id="penSize" style="width:68px;"></div>
+      <button class="btn btn-secondary" onclick="clearWhite()">🗑 Bersihkan</button>
+      <button class="btn btn-primary" onclick="toast('success','💾 Catatan tersimpan!')">💾 Simpan</button>
+    </div>
+  </div>
       </div>
       <div class="feedback fb-info show" id="fb-verify" style="display:block">Pilih kasus untuk diverifikasi!</div>
       <div class="btn-wrap" style="margin-top:14px">
