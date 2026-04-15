@@ -586,6 +586,16 @@ function lockInput(id){
 }
 
 function doSave3(){saveAndNext('p3',function(){return{s1:gv('s1'),s2:gv('s2'),s3:gv('s3')}})}
+   <div class="card">
+    <div class="card-title">🖊️ Papan Kerja (Whiteboard)</div>
+    <p style="font-size:0.79rem;color:var(--text2);margin-bottom:9px;">Gunakan papan ini untuk coret-coret proses perhitunganmu!</p>
+    <canvas id="whiteCanvas" width="560" height="270" style="background:#f0f9ff;border-radius:10px;border:1px solid var(--border);cursor:crosshair;touch-action:none;display:block;max-width:100%;"></canvas>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <input type="color" id="penColor" value="#1e40af" style="width:30px;height:30px;border:none;cursor:pointer;border-radius:5px;" title="Warna pena">
+      <div class="ctrl-group"><label>Ukuran</label><input type="range" min="1" max="14" value="3" id="penSize" style="width:75px;"></div>
+      <button class="btn btn-secondary" onclick="clearWhite()">🗑 Bersihkan</button>
+    </div>
+  </div>
 
 /* ======== PHASE 4 — VERIFICATION (auto-lock correct answers) ======== */
 var verifData=[
